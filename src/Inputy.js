@@ -54,19 +54,22 @@ export class Inputy extends Component{
 	      </div>
 			);
 		}
+
 		else{
 			return(
-				<span>
-		      <label>
-		        <span
-		          className="infoStyles"
-		          title={this.props.thisArray.join(', ')}>
-		          {this.whichOne} 
-		        </span>
-		       	<input
-			        type="checkbox"
-			        checked={this.state.checked} />
-		      </label>
+				<span 
+					className="wraplabel"
+					onClick={el => this.props.changingCounts(el, this.props.whichOne)}>
+	        <span
+	        	onClick={() => false}
+	          className="infoStyles"
+	          title={this.props.thisArray.join(', ')}>
+	          {this.whichOne} 
+	        </span>
+	       	<input
+		        type="checkbox"
+		        checked={this.state.checked}
+		        onChange={el => this.props.changingCounts(el, this.props.whichOne)} />
 		    </span>
 			);
 		}
