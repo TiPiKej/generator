@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { lettersArray, specialArray, numbersArray } from './arrays';
+import { Password } from './Password';
+import { Inputy } from './Inputy';
+import { appStyles, divsStyles } from './styles';
 
-class App extends Component {
+export default class App extends Component {
   constructor(){
     super();
 
@@ -11,45 +15,32 @@ class App extends Component {
       numbers: true,
       letters: true,
 
-      lettersArray: [
-        'a','b','c',
-        'd','e','f',
-        'g','h','i',
-        'j','k','l',
-        'm','n','o',
-        'p','q','r',
-        's','t','u',
-        'v','w','x',
-        'y','z'
-      ],
+      lettersArray,
 
-      specialArray: [
-        '!', '"', '\'',
-        '#', '$', '%',
-        '&', '(', ')',
-        '*', '+', '-',
-        ',', '.', '/',
-        ':', ';', '<',
-        '=', '>', '?',
-        '@', '[', '\\',
-        ']', '^', '_',
-        '`', '{', '|',
-        '}'
-      ]
+      specialArray,
+
+      numbersArray
     }
   }
 
   changingCounts = ({currentTarget}, typ) => {
     switch(currentTarget.type){
       case 'number':
+        if(currentTarget.value < 6){
+          console.log('dsas')
+          console.log(currentTarget.validationMessage);
+        }
+
         this.setState({
-          counts: ((currentTarget.value >= 6) && (currentTarget.value <= 36))? currentTarget.value : this.state.counts
+          counts: ((currentTarget.value >= 1) && (currentTarget.value <= 36))? currentTarget.value : this.state.counts
         });
         break;
-     
-      case 'checkbox':
-        
-        this.setState({[typ]: this.state[typ]? false: true})
+
+      default:
+
+        this.setState({
+          [typ]: this.state[typ]? false: true
+        })
 
         break;
     }
@@ -74,94 +65,40 @@ class App extends Component {
   }
 
   render() {
-    const appStyles = {
-      display: 'flex',
-      justifyContent: 'space-around',
-      flexDirection: 'row'
-    }
-
-    const divsStyles = {
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'column'
-    }
-
-    const inputStyles = {
-      lineHeight: '1.5em',
-      height: '1.5em',
-      width: '250px'
-    }
-
-    const infoStyles = {
-      textDecoration: 'none',
-      color: '#000',
-      cursor: 'default'
-    }
-
     return (
       <div className="App" style={appStyles}>
         <div style={divsStyles}>
-          <p>Ile liczb: </p>
-          <input
-            style={inputStyles}
-            type="number"
-            value={this.state.counts}
-            onChange={this.changingCounts} />
+          <Inputy 
+            counts={this.state.counts}
+            changingCounts={this.changingCounts}/>
+
+
+          <Inputy 
+            whichOne="special"
+            thisArray={this.state.specialArray}
+            checkedArray={this.state.special}
+            changingCounts={this.changingCounts}/>
           
-          <span>
-            <a
-              href="#"
-              style={infoStyles}
-              title={this.state.specialArray.join(', ')}>
-              Znaki specjalne: 
-            </a>
-            <input
-              type="checkbox"
-              checked={this.state.special}
-              onChange={el => this.changingCounts(el, 'special')} />  
-          </span>
+          <Inputy 
+            whichOne="numbers"
+            thisArray={this.state.numbersArray}
+            checkedArray={this.state.numbers}
+            changingCounts={this.changingCounts}/>
           
-          <span>
-            <a
-              href="#"
-              style={infoStyles}
-              title={[0,1,2,3,4,5,6,7,8,9].join(', ')}>
-              Cyfry: 
-            </a>
-            <input
-              type="checkbox"
-              checked={this.state.numbers}
-              onChange={el => this.changingCounts(el, 'numbers')} />  
-          </span>
-          
-          <span>
-            <a
-              href="#"
-              style={infoStyles}
-              title={this.state.lettersArray.join(', ')}>
-              Litery: 
-            </a>
-            <input
-              type="checkbox"
-              checked={this.state.letters}
-              onChange={el => this.changingCounts(el, 'letters')} />  
-          </span>
+          <Inputy 
+            whichOne="letters"
+            thisArray={this.state.lettersArray}
+            checkedArray={this.state.letters}
+            changingCounts={this.changingCounts}/>
           
           <button onClick={this.password}>
             Generuj hasło
           </button>
         </div>
-        <div style={divsStyles}>
-          <p>Hasło: </p>
-          <input
-            style={inputStyles}
-            type="text"
-            value={this.state.password}
-            readOnly="true" />
-        </div>
+
+        <Password  
+          password={this.state.password}/>
       </div>
     );
   }
 }
-
-export default App;
