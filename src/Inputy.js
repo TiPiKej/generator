@@ -49,8 +49,6 @@ export class InputyClass extends Component{
 		if(prevProps.lang !== this.props.lang) this.setState({lang: this.props.lang})
 
 		if(prevProps.blocked !== this.props.blocked) this.setState({blocked: this.props.blocked})
-
-		console.log(this.props.blocked)
 	}
 
 	render(){
