@@ -6,18 +6,12 @@ export class Password extends Component{
 	render(){
 		return(
 			<div className="divsStyles">
-        <p className="title">Hasło: </p>
-        <textarea
+        <p>Hasło: </p>
+        <input
           className="inputStyles"
           type="text"
           value={this.props.password}
-          readOnly="true">
-        </textarea>
-        <button
-          className="buttonClipboard"
-          onClick={this.props.copy}>
-          Kopiuj do schowka!
-        </button>
+          readOnly="true" />
       </div>
 		);
 	}

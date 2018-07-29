@@ -1,21 +1,5 @@
-.wraplabel{
-	margin: 4px 0;
-}
-
-.wraplabel .infoStyles{
+.infoStyles{
   text-decoration: none;
   color: #000;
-  cursor: pointer;
-
-  font-size: 30px;
-
-	background-image: linear-gradient(to bottom,#1f133a 0,#1f133a 100%);
-	background-size: 0px 3px;
-	background-position: 0% 100%;
-	background-repeat: no-repeat;
-	transition: all ease .5s;
-}
-
-.wraplabel .infoStyles:hover{
-	background-size: 100% 3px;
+  cursor: default;
 }

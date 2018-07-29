@@ -37,30 +37,20 @@ export class Inputy extends Component{
 		if(this.props.whichOne === undefined){
 			return(
 				<div className="divsStyles">
-
-					<p className="title">Ile liczb: </p>
-
-	        <div className="inputWrapper">
-
-		        <button
-		        	className="changingValue"
-		        	onClick={el => this.props.changingCounts(el, 'down')}>
-		        	&#8592;
-		        </button>
-
-		        <input
-		          className="inputStyles left_input right_input"
-		          type="text"
-		          value={this.props.counts}
-		          onChange={this.props.changingCounts} />
-
-		        <button
-		        	className="changingValue"
-		        	onClick={el => this.props.changingCounts(el, 'up')}>
-		        	&#8594;
-		        </button>
-
-	      	</div>
+					<p>Ile liczb: </p>
+	        <button
+	        	onClick={el => this.props.changingCounts(el, 'down')}>
+	        	Down
+	        </button>
+	        <input
+	          className="inputStyles"
+	          type="text"
+	          value={this.props.counts}
+	          onChange={this.props.changingCounts} />
+	        <button
+	        	onClick={el => this.props.changingCounts(el, 'up')}>
+	        	Up
+	        </button>
 	      </div>
 			);
 		}
