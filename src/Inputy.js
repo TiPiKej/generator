@@ -113,6 +113,5 @@ const mapStateToProps = (state) => {
     blocked: state.blocked
   }
 };
-const mapDispatchToProps = { blockCharacter };
 
-export const Inputy = connect(mapStateToProps, mapDispatchToProps)(InputyClass);
+export const Inputy = connect(mapStateToProps)(InputyClass);
