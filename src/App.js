@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { lettersArray, specialArray, numbersArray } from './arrays';
 import { Password } from './Password';
 import { Inputy } from './Inputy';
+import { clipboard, changingCounts, passwordFunction } from './Functions';
 import './css/App.css';
 import './css/divsStyles.css';
+import { changeLang } from "./actions/";
+import { connect } from "react-redux";
 
-export default class App extends Component {
+export class App extends Component {
   constructor(){
     super();
 
     this.state = {
+      lang: "pl",
       limit: {
         min: 1,
         max: 36
@@ -18,100 +21,39 @@ export default class App extends Component {
       password: '',
       special: true,
       numbers: true,
-      letters: true,
-
-      lettersArray,
-
-      specialArray,
-
-      numbersArray
+      letters: true
     }
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevProps.lang !== this.props.lang) this.setState({lang: this.props.lang})
   }
 
   changingCounts = ({currentTarget}, typ) => {
     let counts = this.state.counts;
     const limit = this.state.limit;
-    switch(typ){
-      case "up":
-        counts++;
-        /* turning on / off buttons */
-        if(limit.max === counts){
-          currentTarget.className += ' disable';
-        }
-        currentTarget.previousSibling.previousSibling.className = 'changingValue';
 
-        /* changing value of text input */
-        if(limit.max >= counts) this.setState({counts});
-        break;
-
-      case "down":
-        counts--;
-        
-        /* turning on / off buttons */
-        if(limit.min === counts){
-          currentTarget.className += ' disable';
-        }
-        currentTarget.nextSibling.nextSibling.className = 'changingValue';
-        /* changing value of text input */
-        if(limit.min <= counts) this.setState({counts});
-        break;
-
-      default:
-        switch(currentTarget.type){
-          case 'text':
-            const value = currentTarget.value;
-
-            /* changing length of password */
-            let counts = this.state.counts;
-            if((value >= limit.min) && (value <= limit.max)) counts = value;
-            else if( value < limit.min ) counts = limit.min;
-            else if( value > limit.max ) counts = limit.max;
-
-
-            /* turning on / off buttons */
-            
-            currentTarget.previousSibling.className = 'changingValue';
-            currentTarget.nextSibling.className = 'changingValue';
-
-            if(Number(counts) === Number(limit.min)){
-              currentTarget.previousSibling.className += ' disable';
-            }
-            else if(Number(counts) === Number(limit.max)){
-              currentTarget.nextSibling.className += ' disable';
-            }
-
-
-            this.setState({ counts });
-            
-            break;
-
-          default:
-
-            this.setState({
-              [typ]: this.state[typ]? false: true
-            })
-
-            break;
-        }
-        break;
+    if(currentTarget.className === "wraplabel"){
+      this.setState({
+        [typ]: this.state[typ]? false: true
+      })
     }
+
+    const currentCounts = changingCounts(currentTarget, typ, {counts, limit});
+
+    this.setState({ counts: currentCounts });
   }
 
   password = () => {
-    let collection = [];
-
-    if(this.state.letters) {
-      Array.from(this.state.lettersArray).forEach(el => collection.push(el));
-      Array.from(this.state.lettersArray).forEach(el => collection.push(el.toUpperCase()));
-    }
-    if(this.state.numbers) for(let i = 0; i <= 9; i++) collection.push(i);
-    if(this.state.special) Array.from(this.state.specialArray).forEach(el => collection.push(el));
     
-    let password = '';
-    for(let i = 1; i <= this.state.counts; i++){
-      const random = Math.floor(Math.random() * collection.length);
-      password += collection[random] === undefined? "Brak Danych " : collection[random];
-    }
+    const password = passwordFunction({
+      lang: this.state.lang,
+      letters: this.state.letters,
+      numbers: this.state.numbers,
+      special: this.state.special,
+      counts: this.state.counts
+    });
+
     this.setState({password});
   }
 
@@ -128,14 +70,28 @@ export default class App extends Component {
 
     const tooltip = document.createElement('div');
           tooltip.className = 'tooltip';
-          tooltip.innerHTML = `Skopiono do chowka: ${pass}`;
+          if(this.state.lang === 'pl') tooltip.innerHTML = `Skopiono do chowka: ${pass}`;
+          else tooltip.innerHTML = `Copied to clipboard: ${pass}`;
           setTimeout(() => tooltip.style.opacity = 1, 10);
           setTimeout(() => {
-            tooltip.style.opacity = 0,
+            tooltip.style.opacity = 0;
             setTimeout(() => tooltip.remove(), 500);
           }, 3000);
 
     currentTarget.appendChild(tooltip)
+  }
+
+  changeLang = ({currentTarget}) => {
+    let lang = this.state.lang;
+
+    if(lang === 'pl') lang = 'en';
+    else lang = 'pl';
+
+    this.props.changeLang(lang)
+  }
+
+  blockCharacter = ({currentTarget}, character, nr, whichOne) => {
+    console.log(currentTarget, character, nr, whichOne)
   }
 
   render() {
@@ -149,33 +105,55 @@ export default class App extends Component {
 
           <Inputy 
             whichOne="special"
-            thisArray={this.state.specialArray}
             checkedArray={this.state.special}
             changingCounts={this.changingCounts}/>
           
           <Inputy 
             whichOne="numbers"
-            thisArray={this.state.numbersArray}
             checkedArray={this.state.numbers}
             changingCounts={this.changingCounts}/>
           
           <Inputy 
             whichOne="letters"
-            thisArray={this.state.lettersArray}
             checkedArray={this.state.letters}
             changingCounts={this.changingCounts}/>
           
           <button 
             className="passButton"
             onClick={this.password}>
-            Generuj hasło
+            {this.state.lang === 'pl'?"Generuj hasło":"Random password"}
           </button>
         </div>
 
         <Password  
           password={this.state.password}
-          copy={this.clipboard}/>
+          copy={el => clipboard(el, this.state.lang)}/>
+
+        <button 
+          style={{
+            width: '100px',
+            lineHeight: '1.5em',
+            height: '1.5em',
+            position: 'absolute',
+            top: '5px',
+            right: '5px',
+            cursor: 'pointer'
+          }}
+          onClick={this.changeLang}>
+          {this.state.lang === 'pl'? "English": "Polski"}
+        </button>
       </div>
     );
   }
 }
+
+
+
+const mapStateToProps = (state) => {
+  return {
+    lang: state.lang
+  }
+};
+const mapDispatchToProps = { changeLang };
+
+export const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);

@@ -2,35 +2,53 @@ import React, {Component} from 'react';
 import './css/divsStyles.css';
 import './css/infoStyles.css';
 import './css/inputStyles.css';
+import { connect } from "react-redux";
+import * as arrays from './arrays';
 
-export class Inputy extends Component{
+export class InputyClass extends Component{
 	constructor(props){
 		super(props);
 
 		this.state = {
-			checked: props.checkedArray
+			checked: props.checkedArray,
+			lang: 'pl',
+			blocked: {}
 		}
 
 		switch(this.props.whichOne){
 			case "special":
-				this.whichOne = "Znaki specjalne: "
+				this.whichOne = {
+					pl: "Znaki specjalne: ", // Polish lang
+					en: "Special characters: " // English lang and others
+				}
 				break;
 			case "numbers":
-				this.whichOne = "Cyfry: "
+				this.whichOne = {
+					pl: "Cyfry: ", // Polish lang
+					en: "Numbers: " // English lang and others
+				}
 				break;
 			case "letters":
-				this.whichOne = "Litery: "
+				this.whichOne = {
+					pl: "Litery: ", // Polish lang
+					en: "Letters: " // English lang and others
+				}
 				break;
 			default:
-				this.whichOne = "Ile liczb: "
+				this.whichOne = {
+					pl: "Ile liczb: ", // Polish lang
+					en: "How long: " // English lang and others
+				}
 				break;
 		}
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot){
-		if(prevProps.checkedArray !== this.props.checkedArray){
-			this.setState({checked: this.props.checkedArray})
-		}
+		if(prevProps.checkedArray !== this.props.checkedArray) this.setState({checked: this.props.checkedArray});
+
+		if(prevProps.lang !== this.props.lang) this.setState({lang: this.props.lang})
+
+		if(prevProps.blocked !== this.props.blocked) this.setState({blocked: this.props.blocked})
 	}
 
 	render(){
@@ -38,7 +56,7 @@ export class Inputy extends Component{
 			return(
 				<div className="divsStyles">
 
-					<p className="title">Ile liczb: </p>
+					<p className="title">{this.whichOne[this.state.lang]}</p>
 
 	        <div className="inputWrapper">
 
@@ -73,8 +91,8 @@ export class Inputy extends Component{
 	        <span
 	        	onClick={() => false}
 	          className="infoStyles"
-	          title={this.props.thisArray.join(', ')}>
-	          {this.whichOne} 
+	          title={arrays[this.props.whichOne + "Array"].join(', ')}>
+	          {this.whichOne[this.state.lang]} 
 	        </span>
 	       	<input
 		        type="checkbox"
@@ -85,3 +103,13 @@ export class Inputy extends Component{
 		}
 	}
 }
+
+
+const mapStateToProps = (state) => {
+  return {
+    lang: state.lang,
+    blocked: state.blocked
+  }
+};
+
+export const Inputy = connect(mapStateToProps)(InputyClass);
