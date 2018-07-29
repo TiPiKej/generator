@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import { divsStyles, inputStyles } from './styles';
+import './css/inputStyles.css';
+import './css/divsStyles.css';
 
 export class Password extends Component{
 	render(){
 		return(
-			<div style={divsStyles}>
+			<div className="divsStyles">
         <p>Hasło: </p>
         <input
-          style={inputStyles}
+          className="inputStyles"
           type="text"
           value={this.props.password}
           readOnly="true" />

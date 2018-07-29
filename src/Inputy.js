@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import { inputStyles, infoStyles, divsStyles } from './styles';
+import './css/divsStyles.css';
+import './css/infoStyles.css';
+import './css/inputStyles.css';
 
 export class Inputy extends Component{
 	constructor(props){
@@ -34,22 +36,30 @@ export class Inputy extends Component{
 	render(){
 		if(this.props.whichOne === undefined){
 			return(
-				<div style={divsStyles}>
+				<div className="divsStyles">
 					<p>Ile liczb: </p>
+	        <button
+	        	onClick={el => this.props.changingCounts(el, 'down')}>
+	        	Down
+	        </button>
 	        <input
-	          style={inputStyles}
-	          type="number"
+	          className="inputStyles"
+	          type="text"
 	          value={this.props.counts}
 	          onChange={this.props.changingCounts} />
+	        <button
+	        	onClick={el => this.props.changingCounts(el, 'up')}>
+	        	Up
+	        </button>
 	      </div>
 			);
 		}
 		else{
 			return(
 				<span>
-		      <label onClick={el => this.props.changingCounts(el, this.props.whichOne)}>
+		      <label>
 		        <span
-		          style={infoStyles}
+		          className="infoStyles"
 		          title={this.props.thisArray.join(', ')}>
 		          {this.whichOne} 
 		        </span>

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { lettersArray, specialArray, numbersArray } from './arrays';
 import { Password } from './Password';
 import { Inputy } from './Inputy';
-import { appStyles, divsStyles } from './styles';
+import './css/App.css';
+import './css/divsStyles.css';
 
 export default class App extends Component {
   constructor(){
@@ -24,15 +25,17 @@ export default class App extends Component {
   }
 
   changingCounts = ({currentTarget}, typ) => {
+    console.log(currentTarget)
     switch(currentTarget.type){
-      case 'number':
-        if(currentTarget.value < 6){
+      case 'text':
+        const value = currentTarget.value;
+        if(value < 6){
           console.log('dsas')
           console.log(currentTarget.validationMessage);
         }
 
         this.setState({
-          counts: ((currentTarget.value >= 1) && (currentTarget.value <= 36))? currentTarget.value : this.state.counts
+          counts: ((value >= 1) && (value <= 36))? value : this.state.counts
         });
         break;
 
@@ -66,8 +69,8 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className="App" style={appStyles}>
-        <div style={divsStyles}>
+      <div className="App">
+        <div className="divsStyles">
           <Inputy 
             counts={this.state.counts}
             changingCounts={this.changingCounts}/>
