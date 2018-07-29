@@ -25,7 +25,6 @@ export default class App extends Component {
   }
 
   changingCounts = ({currentTarget}, typ) => {
-    console.log(currentTarget)
     switch(currentTarget.type){
       case 'text':
         const value = currentTarget.value;
