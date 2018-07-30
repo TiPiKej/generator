@@ -107,8 +107,7 @@ export class InputyClass extends Component{
 
 const mapStateToProps = (state) => {
   return {
-    lang: state.lang,
-    blocked: state.blocked
+    lang: state.lang
   }
 };
 
