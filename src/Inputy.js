@@ -12,7 +12,7 @@ export class InputyClass extends Component{
 		this.state = {
 			checked: props.checkedArray,
 			lang: 'pl',
-			blocked: {}
+			extraChar: []
 		}
 
 		switch(this.props.whichOne){
@@ -34,9 +34,15 @@ export class InputyClass extends Component{
 					en: "Letters: " // English lang and others
 				}
 				break;
+			case "extra":
+				this.whichOne = {
+					pl: "Dodatkowe znaki: ", // Polish lang
+					en: "Extra characters: " // English lang and others
+				}
+				break;
 			default:
 				this.whichOne = {
-					pl: "Ile liczb: ", // Polish lang
+					pl: "Długość hasła: ", // Polish lang
 					en: "How long: " // English lang and others
 				}
 				break;
@@ -49,6 +55,14 @@ export class InputyClass extends Component{
 		if(prevProps.lang !== this.props.lang) this.setState({lang: this.props.lang})
 
 		if(prevProps.blocked !== this.props.blocked) this.setState({blocked: this.props.blocked})
+	}
+
+	changeExtraChar = ({currentTarget}) => {
+		this.setState({
+			extraChar: currentTarget.value
+		})
+
+		this.props.onChangeValue(currentTarget.value)
 	}
 
 	render(){
@@ -80,6 +94,26 @@ export class InputyClass extends Component{
 
 	      	</div>
 	      </div>
+			);
+		}
+
+		else if(this.props.whichOne === 'extra'){
+			return(
+				<span 
+					className="wraplabel">
+					<span
+	          className="infoStyles">
+						{this.whichOne[this.state.lang]}
+					</span>
+					<input
+						className="inputStyles"
+						style={{
+							width: `${this.state.extraChar.length * 25 + 42}px`
+						}}
+						type='text'
+						value={this.state.extraChar}
+						onChange={this.changeExtraChar}/>
+				</span>
 			);
 		}
 

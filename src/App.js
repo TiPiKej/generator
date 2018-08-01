@@ -21,7 +21,8 @@ export class App extends Component {
       password: '',
       special: true,
       numbers: true,
-      letters: true
+      letters: true,
+      extra: []
     }
   }
 
@@ -51,7 +52,8 @@ export class App extends Component {
       letters: this.state.letters,
       numbers: this.state.numbers,
       special: this.state.special,
-      counts: this.state.counts
+      counts: this.state.counts,
+      extraArray: this.state.extra
     });
 
     this.setState({password});
@@ -90,8 +92,9 @@ export class App extends Component {
     this.props.changeLang(lang)
   }
 
-  blockCharacter = ({currentTarget}, character, nr, whichOne) => {
-    console.log(currentTarget, character, nr, whichOne)
+  changeExtraChar = (extraCharacters) => {
+    const extra = Array.from(extraCharacters)
+    this.setState({extra})
   }
 
   render() {
@@ -118,6 +121,10 @@ export class App extends Component {
             checkedArray={this.state.letters}
             changingCounts={this.changingCounts}/>
           
+          <Inputy
+            whichOne="extra"
+            onChangeValue={this.changeExtraChar}/>
+
           <button 
             className="passButton"
             onClick={this.password}>

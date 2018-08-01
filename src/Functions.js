@@ -1,6 +1,6 @@
 import { lettersArray, specialArray, numbersArray } from './arrays';
 
-export const passwordFunction = ({lang, letters, numbers, special, counts}) => {
+export const passwordFunction = ({lang, letters, numbers, special, counts, extraArray = []}) => {
 	let collection = [];
   if(letters) {
     Array.from(lettersArray).forEach(el => collection.push(el));
@@ -8,6 +8,7 @@ export const passwordFunction = ({lang, letters, numbers, special, counts}) => {
   }
   if(numbers) Array.from(numbersArray).forEach(el => collection.push(el));
   if(special) Array.from(specialArray).forEach(el => collection.push(el));
+  Array.from(extraArray).forEach(el => collection.push(el));
   
   let password = '';
   for(let i = 1; i <= counts; i++){
